@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy New Year</title>
+  <style>
+    /* General Styles */
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: black;
+    }
+
+    /* Fireworks Canvas */
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* Content Container */
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+      z-index: 10;
+    }
+
+    .content h1 {
+      font-size: 3rem;
+      color: #FFD700;
+      text-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700;
+    }
+
+    .content p {
+      font-size: 1.5rem;
+      margin: 20px 0;
+    }
+
+    .content button {
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      background: #FF4500;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #FF4500, 0 0 20px #FF4500;
+      transition: transform 0.3s;
+    }
+
+    .content button:hover {
+      transform: scale(1.1);
+    }
+
+    /* Hidden Letter */
+    #hidden-message {
+      display: none;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      animation: fadeIn 1s forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Fireworks Canvas -->
+  <canvas id="fireworks"></canvas>
+
+  <!-- Content Section -->
+  <div class="content">
+    <h1>Happy New Year, My Love! 🎉</h1>
+    <p>This year is brighter because of you. Let’s make 2024 unforgettable!</p>
+    <button onclick="revealMessage()">Open Your Surprise</button>
+    <div id="hidden-message">
+      <p>Dear, Aakanksha-pineapple-cutetu-golumolu-ladu,</p>
+      <p>Thank you for making my life beautiful and i believe you'll fill it with love and joy. I can't wait for all the memories we will create together this year. You are my everything. Happy New Year! 💖</p>
+      <p>Love, Ayush</p>
+    </div>
+  </div>
+
+  <!-- JavaScript for Continuous Fireworks -->
+  <script>
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    class Particle {
+      constructor(x, y, color, velocity) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.velocity = velocity;
+        this.alpha = 1;
+      }
+
+      update() {
+        this.x += this.velocity.x;
+        this.y += this.velocity.y;
+        this.alpha -= 0.02;
+      }
+
+      draw() {
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function createFirework() {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height / 2;
+      const colors = ["#FF4500", "#FFD700", "#00FF00", "#1E90FF", "#FF69B4"];
+      for (let i = 0; i < 50; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 3 + 1;
+        particles.push(
+          new Particle(
+            x,
+            y,
+            colors[Math.floor(Math.random() * colors.length)],
+            { x: Math.cos(angle) * speed, y: Math.sin(angle) * speed }
+          )
+        );
+      }
+    }
+
+    function animate() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((particle, index) => {
+        if (particle.alpha <= 0) {
+          particles.splice(index, 1);
+        } else {
+          particle.update();
+          particle.draw();
+        }
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    setInterval(createFirework, 1000); // Fireworks every second
+    animate();
+
+    function revealMessage() {
+      document.getElementById("hidden-message").style.display = "block";
+    }
+  </script>
+</body>
+</html>
+
